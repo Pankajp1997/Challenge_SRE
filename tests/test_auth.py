@@ -11,7 +11,9 @@ def test_register(client, app):
     response = client.post(
         '/auth/register', data={'username': 'a', 'password': 'a'}
     )
-    assert 'http://localhost/auth/login' == response.headers['Location']
+    #assert 'http://localhost/auth/login' == response.headers['Location']
+    assert response.headers['Location'] == '/auth/login'
+
 
     # test that the user was inserted into the database
     with app.app_context():
