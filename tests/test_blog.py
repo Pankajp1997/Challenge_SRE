@@ -85,7 +85,7 @@ def test_create_update_validate(client, auth, path):
 def test_delete(client, auth, app):
     auth.login()
     response = client.post('/1/delete')
-    assert response.headers['Location'] == '/auth/login'
+    assert response.headers['Location'] == '/'
 
     with app.app_context():
         db = get_db()
