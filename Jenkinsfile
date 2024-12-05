@@ -35,5 +35,42 @@ pipeline {
                 sh 'pytest'
             }
         }
+        stage ('Login to Dockerhub'){
+            steps{
+                // USe Dockerhub Credentils to login 
+                withCredentials([string (credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')])
+                {
+                    sh "docker login -u kubepankaj -p ${dockerhubpwd} "
+                    echo 'login Successfully'
+                }
+            }
+        }
+        stage('Build Docker Image'){
+            steps{
+                script{
+                    echo "Building Docker Image ${IMAGE_TAG}"
+                    sh 'docker build -t ${IMAGE_TAG} . '
+                    echo "Successfully built an Image ${IMAGE_TAG}"
+                }
+            }
+        }
+        stage('Approve the Image'){
+            steps{
+                script{
+                    //Taking the approval to run which container from the user which Image is to be send to dockerhub.
+                    def userInput = input (id: 'userInput', message: 'Approve and provided docker image', parameters: [string(name: 'DOCKER_IMAGE', defaultValue: 'defaultValue', description: 'Enter the docker image')])
+                    env.DOCKER_IMAGE = userInput
+                }
+            }
+        }
+        stage('Starting the container with Image'){
+            steps{
+                script{
+                    echo "Deploiyng Docker image ${env.DOCKER_IMAGE}"
+                    sh"docker push ${env.Docker_IMAGE}"
+                    //sh "docker run -d ${env.DOCKER_IMAGE}"
+                }
+            }
+        }
     }
 }
