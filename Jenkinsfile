@@ -63,7 +63,7 @@ pipeline {
                 }
             }
         }
-        stage('Starting the container with Image'){
+        stage('Deploy to dockerhub'){
             steps{
                 script{
                     echo "Deploiyng Docker image ${env.DOCKER_IMAGE}"
