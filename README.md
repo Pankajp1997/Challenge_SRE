@@ -44,3 +44,8 @@ Post your experience on social media with hashtags: #getfitwithsagar, #SRELife, 
 
 ![image](https://github.com/user-attachments/assets/d97b22c9-a69c-4010-b243-4522f86a2d2d)
 
+Run the latest docker image to create a container. using 
+docker run -it -p 5000:5000 <docker-image-name> 
+Make sure you have opened the inbound rule 5000 for your instance. 
+![image](https://github.com/user-attachments/assets/17efe56d-6f5d-4d42-a711-165f29c3e905)
+
