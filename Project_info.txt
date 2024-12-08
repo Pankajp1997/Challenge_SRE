@@ -1,0 +1,86 @@
+*Jenkins CI/CD pipeline creation for the flaskr project. 
+Create an ubuntu ec2-instance with the t3.medium size.
+***Connect to the ec2-instance with SSH 
+*** Install jenkins on the Ubuntu 
+create a file using below command 
+$ vi install_jenkins.sh 
+copy and Paste into the install_jenkins.sh file 
+=============================================================================
+sudo apt update
+sudo apt install fontconfig openjdk-17-jre -y 
+java -version
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins  -y 
+==============================================================================
+Give the access to user to execute the file 
+$ sudo chmod +x install_jenkins.sh 
+$ ./ install_jenkins.sh 
+
+***Install Docker on the server using below procedure.
+copy and Paste into the install_docker.sh
+vi install_docker.sh 
+================================================================================
+#!/bin/bash
+
+# Update package manager repositories
+sudo apt-get update
+
+# Install necessary dependencies
+sudo apt-get install -y ca-certificates curl
+
+# Create directory for Docker GPG key
+sudo install -m 0755 -d /etc/apt/keyrings
+
+# Download Docker's GPG key
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+
+# Ensure proper permissions for the key
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add Docker repository to Apt sources
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Update package manager repositories
+sudo apt-get update
+
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin 
+=====================================================================================
+Do the following opeartions for the same docker file 
+$ chmod +x install_docker.sh
+$ ./install_docker.sh
+$ sudo systemctl start docker 
+$ sudo systemctl enable docker 
+# Add the docker user 
+$ sudo usermod -aG docker $USER
+# Apply changes 
+$ newgrp docker 
+# Adding docker in the jenkins group.
+$ sudo usermod -aG docker jenkins   
+$ sudo systemctl restart jenkins
+** From security group of ec2-instance open the port 5000 and 8080 at once. 
+$ sudo apt install python3-pytest -y 
+$ sudo apt install python3.12-venv -y 
+$ sudo apt install python3-pip -y 
+$ sudo apt install python3-flask -y 
+
+*** You need to configure the dockerhub password in the jenkins credentials.
+you can go to manage_jenkins--> credentials --> click on global and add credentials --> secret text --> add the secret text= password of your dockerhub and id as you want. 
+click on create. you did it right. we gonna use this cred for dockerhub login to push the image to docke registry. 
+
+** This CI/CD, pipeline I have created for to get an approval from the user to check the image vulnability and then grant the access to proceed the pipeline. I have added approval stage 
+in the pipeline. 
+
+Please approve it with the create docker image name, $ docker images  and then copy the latest name. and paste it to the image name in the jenkins UI. 
+Then Check the pipeline status.
+
+
+
+
+
