@@ -40,3 +40,7 @@ Include a README.md file explaining your pipeline steps, challenges faced, and k
 Share Your Progress:
 
 Post your experience on social media with hashtags: #getfitwithsagar, #SRELife, #DevOpsForAll.
+
+
+![image](https://github.com/user-attachments/assets/d97b22c9-a69c-4010-b243-4522f86a2d2d)
+
